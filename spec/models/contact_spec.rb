@@ -10,7 +10,12 @@ describe Contact do
   end
 
   # 名がなければ無効な状態であること
-  it "is invalid without a firstname"
+  it "is invalid without a firstname" do
+    contact = Contact.new(firstname: nil)
+    contact.valid?
+    expect(contact.errors[:firstname]).to include("can't be blank")
+  end
+
   # 姓がなければ無効な状態であること
   it "is invalid without a lastname"
   # メールアドレスがなければ無効な状態であること
