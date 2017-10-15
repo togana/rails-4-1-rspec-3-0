@@ -24,7 +24,12 @@ describe Contact do
   end
 
   # メールアドレスがなければ無効な状態であること
-  it "is invalid without an email address"
+  it "is invalid without an email address" do
+    contact = Contact.new(email: nil)
+    contact.valid?
+    expect(contact.errors[:email]).to include("can't be blank")
+  end
+
   # 重複したメールアドレスなら無効な状態であること
   it "is invalid with a duplicate email address"
   # 連絡先のフルネームを文字列として返すこと
