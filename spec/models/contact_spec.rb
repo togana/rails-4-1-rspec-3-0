@@ -6,6 +6,11 @@ describe Contact do
     expect(build(:contact)).to be_valid
   end
 
+  # 3つの電話番号を持つこと
+  it "has three phone numbers" do
+    expect(create(:contact).phones.count).to eq 3
+  end
+
   # 姓と名とメールがあれば有効な状態であること
   it "is valid with a firstname, lastname and email" do
     contact = build(:contact,
