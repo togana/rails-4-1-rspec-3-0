@@ -8,7 +8,7 @@ describe Contact do
 
   # 姓と名とメールがあれば有効な状態であること
   it "is valid with a firstname, lastname and email" do
-    contact = Contact.new(
+    contact = build(:contact,
       firstname: 'Aaron',
       lastname: 'Sumner',
       email: 'tester@example.com')
@@ -55,17 +55,17 @@ describe Contact do
   # 文字で姓をフィルタする
   describe "filter last name by letter" do
     before :each do
-      @smith = Contact.create(
+      @smith = create(:contact,
         firstname: 'John',
         lastname: 'Smith',
         email: 'jsmith@example.com'
       )
-      @jones = Contact.create(
+      @jones = create(:contact,
         firstname: 'Tim',
         lastname: 'Jones',
         email: 'tjones@example.com'
       )
-      @johnson = Contact.create(
+      @johnson = create(:contact,
         firstname: 'John',
         lastname: 'Johnson',
         email: 'jjohnson@example.com'
