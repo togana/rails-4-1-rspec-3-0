@@ -53,26 +53,29 @@ describe Contact do
 
   # 文字で姓をフィルタする
   describe "filter last name by letter" do
-  # マッチする文字の場合
+    before :each do
+      @smith = Contact.create(
+        firstname: 'John',
+        lastname: 'Smith',
+        email: 'jsmith@example.com'
+      )
+      @jones = Contact.create(
+        firstname: 'Tim',
+        lastname: 'Jones',
+        email: 'tjones@example.com'
+      )
+      @johnson = Contact.create(
+        firstname: 'John',
+        lastname: 'Johnson',
+        email: 'jjohnson@example.com'
+      )
+    end
+
+    # マッチする文字の場合
     context "matching letters" do
       # マッチした結果をソート済みの配列として返すこと
       it "returns a sorted array of results that match" do
-        smith = Contact.create(
-          firstname: 'John',
-          lastname: 'Smith',
-          email: 'jsmith@example.com'
-        )
-        jones = Contact.create(
-          firstname: 'Tim',
-          lastname: 'Jones',
-          email: 'tjones@example.com'
-        )
-        johnson = Contact.create(
-          firstname: 'John',
-          lastname: 'Johnson',
-          email: 'jjohnson@example.com'
-        )
-        expect(Contact.by_letter("J")).to eq [johnson, jones]
+        expect(Contact.by_letter("J")).to eq [@johnson, @jones]
       end
     end
 
@@ -80,22 +83,7 @@ describe Contact do
     context "non-matching letters" do
       # マッチしなかったものは結果に含まれないこと
       it "omits results that do not match" do
-        smith = Contact.create(
-          firstname: 'John',
-          lastname: 'Smith',
-          email: 'jsmith@example.com'
-        )
-        jones = Contact.create(
-          firstname: 'Tim',
-          lastname: 'Jones',
-          email: 'tjones@example.com'
-        )
-        johnson = Contact.create(
-          firstname: 'John',
-          lastname: 'Johnson',
-          email: 'jjohnson@example.com'
-        )
-        expect(Contact.by_letter("J")).not_to include smith
+        expect(Contact.by_letter("J")).not_to include @smith
       end
     end
   end
