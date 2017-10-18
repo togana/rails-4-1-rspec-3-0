@@ -78,19 +78,44 @@ describe ContactsController do
   end
 
   describe 'POST #create' do
+    before :each do
+      @phones = [
+        attributes_for(:phone),
+        attributes_for(:phone),
+        attributes_for(:phone)
+      ]
+    end
+
     # 有効な属性の場合
     context 'with valid attributes' do
       # データベースに新しい連絡先を保存すること
-      it 'saves the new contact in the database'
+      it 'saves the new contact in the database' do
+        expect {
+          post :create, contact: attributes_for(:contact,
+            phones_attributes: @phones)
+        }.to change(Contact, :count).by(1)
+      end
       # contacts#show にリダイレクトすること
-      it 'redirects to contacts#show'
+      it 'redirects to contacts#show' do
+        post :create, contact: attributes_for(:contact,
+          phones_attributes: @phones)
+        expect(response).to redirect_to contact_path(assigns[:contact])
+      end
     end
     # 無効な属性の場合
     context 'with invalid attributes' do
       # データベースに新しい連絡先を保存しないこと
-      it 'does not save the new contact in the database'
+      it 'does not save the new contact in the database' do
+        expect {
+          post :create,
+            contact: attributes_for(:invalid_contact)
+        }.to_not change(Contact, :count)
+      end
       # :new テンプレートを再表示すること
-      it 're-renders the :new template'
+      it 're-renders the :new template' do
+        post :create, contact: attributes_for(:invalid_contact)
+        expect(response).to render_template :new
+      end
     end
   end
 
