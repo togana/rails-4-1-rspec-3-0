@@ -2,7 +2,7 @@ require 'rails_helper'
 
 describe ContactsController do
   # admin ユーザーの場合
-  describe"administrator access"do
+  describe 'administrator access' do
     before :each do
       user = create(:admin)
       session[:user_id] = user.id
