@@ -381,4 +381,96 @@ describe ContactsController do
       end
     end
   end
+
+  # ゲスト ユーザの場合
+  describe"guest access"do
+    describe 'GET #index' do
+      # params[:letter] がある場合
+      context 'with params[:letter]' do
+        # 指定された文字で始まる連絡先を配列にまとめること
+        it 'populates an array of contacts starting with the letter' do
+          smith = create(:contact, lastname: 'Smith')
+          create(:contact, lastname: 'Jones')
+          get :index, letter: 'S'
+          expect(assigns(:contacts)).to match_array([smith])
+        end
+        # :index テンプレートを表示すること
+        it 'renders the :index template' do
+          get :index, letter: 'S'
+          expect(response).to render_template :index
+        end
+      end
+      # params[:letter] がない場合
+      context 'without params[:letter]' do
+        # 全ての連絡先を配列にまとめること
+        it 'populates an array of all contacts' do
+          smith = create(:contact, lastname: 'Smith')
+          jones = create(:contact, lastname: 'Jones')
+          get :index
+          expect(assigns(:contacts)).to match_array([smith, jones])
+        end
+        # :index テンプレートを表示すること
+        it 'renders the :index template' do
+          get :index
+          expect(response).to render_template :index
+        end
+      end
+    end
+
+    describe 'GET #show' do
+      # @contact に要求された連絡先を割り当てること
+      it 'assigns the requested contact to @contact' do
+        contact = create(:contact)
+        get :show, id: contact
+        expect(assigns(:contact)).to eq contact
+      end
+      # :show テンプレートを表示すること
+      it 'renders the :show template' do
+        contact = create(:contact)
+        get :show, id: contact
+        expect(response).to render_template :show
+      end
+    end
+
+    describe 'GET #new' do
+      # ログインを要求すること
+      it 'requires login' do
+        get :new
+        expect(response).to redirect_to login_url
+      end
+    end
+
+    describe 'GET #edit' do
+      # ログインを要求すること
+      it 'requires login' do
+        contact = create(:contact)
+        get :edit, id: contact
+        expect(response).to redirect_to login_url
+      end
+    end
+
+    describe 'POST #create' do
+      # ログインを要求すること
+      it 'requires login' do
+        post :create, id: create(:contact), contact: attributes_for(:contact)
+        expect(response).to redirect_to login_url
+      end
+    end
+
+    describe 'PUT #update' do
+      # ログインを要求すること
+      it 'requires login' do
+        put :update, id: create(:contact), contact: attributes_for(:contact)
+        expect(response).to redirect_to login_url
+      end
+    end
+
+    describe 'DELETE #destroy' do
+      # ログインを要求すること
+      it 'requires login' do
+        delete :destroy, id: create(:contact)
+        expect(response).to redirect_to login_url
+      end
+    end
+  end
 end
